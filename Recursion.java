@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Recursion {
     public static void printRange(int start,int end){
         if(start == end){
@@ -210,6 +212,10 @@ public class Recursion {
         return permutations;
     }
 
+    public static String strPermutations(String str){
+        return strPermutations(str,"","");
+    }
+
     public static int mazePaths(int fromR, int fromC, int toR, int toC, int paths){
         if((fromC == toC) || (fromR == toR)){
             return paths+1;
@@ -220,8 +226,48 @@ public class Recursion {
         return paths;
     }
 
-    public static String strPermutations(String str){
-        return strPermutations(str,"","");
+    public static int placeTilesInFloor(int fRow, int fCol){
+        int ways = 0;
+
+        if(fRow == 0){
+            return ways+1;
+        }
+        if(fRow < 0){
+            return ways;
+        }
+
+        ways += placeTilesInFloor(fRow-1, fCol); // horizontal placement
+        ways += placeTilesInFloor(fRow-fCol, fCol); // horizontal placement
+
+        return ways;
+    }
+
+    public static int inviteSingleOrPair(int peoples){
+        if(peoples <= 0) return 1;
+
+        int ways1 = inviteSingleOrPair(peoples-1);
+        int ways2 = (peoples-1)*inviteSingleOrPair(peoples-2);
+        return ways1+ways2;
+    }
+    
+    public static ArrayList<Integer>[] allSubsets(int n, ArrayList<Integer> subset, ArrayList<Integer>[] array) {
+        if(n == 0){
+            for(int i = 0; i < calPower(2, n); i++){
+                if(array[i] == null){
+                    array[i] = subset;
+                    System.out.println(i);
+                    break;
+                }
+            }
+            return array;
+        }
+
+        subset.add(n);
+        array = allSubsets(n-1, subset,array);
+
+        subset.remove(subset.size()-1);
+        array = allSubsets(n-1, subset,array);
+        return array;
     }
 
     public static void main(String[] args){
@@ -260,6 +306,17 @@ public class Recursion {
         // System.out.println(strPermutations("abc"));
 
         // maze paths from (0,0) to (n,n)
-        System.out.println(mazePaths(1,1, 3, 3, 0));
+        // System.out.println(mazePaths(1,1, 3, 3, 0));
+
+        // place tiles size of 1Xm in a floor size of nXm (how many ways it can be placed)
+        // System.out.println(inviteSingleOrPair(3));
+        int n = 3;
+        ArrayList<Integer>[] array = allSubsets(3, new ArrayList<>(), new ArrayList[calPower(2, n)]);
+
+        // for( ArrayList<Integer> a: array ){
+        //     for(int i = 0; i < a.size(); i++){
+        //         System.out.println(a.get(i));
+        //     }
+        // }
     }
 }
