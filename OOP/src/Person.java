@@ -1,12 +1,14 @@
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Person {
     private static int totalPopulation;
     private static int totalMale;
     private static int totalFemale;
     private static int totalOtherGender;
+    private static Random random = new Random();
 
     private String fName;
     private String mName;
@@ -38,12 +40,34 @@ public class Person {
         this.dof = dateOfBirth;
         this.birthPlace = birthPlace;
         this.birthCountry = birthCountry;
-        this.gender = gender;
+
+        if(isValidGender(gender)){
+            this.gender = gender;
+        }else{
+            throw new CustomException.InvalidGenderException();
+        }
         
-        population(this.gender);
+        population();
     }
 
-    private static void population(String gender){
+    private static boolean isValidGender(String gender) {
+        if (gender.equals("male") || gender.equals("female") || gender.equals("other"))
+            return true;
+
+        else return false;
+    }
+
+    private static boolean isValidBloodGroup(String type) {
+        if (type.equals("A+") || type.equals("A-") || type.equals("B+") || type.equals("B-") || 
+            type.equals("O+") || type.equals("O-") || type.equals("AB+") || type.equals("AB-")){
+
+                return true;
+            }
+
+        else return false;
+    }
+
+    private void population(){
         totalPopulation++;
 
         if(gender.equals("male")){
@@ -56,8 +80,12 @@ public class Person {
     }
 
     private boolean filledAddresses(){
-        return (city == null && state == null && postCode == null 
-            && cAddress == null && pAddress == null && nationality == null);
+        if(city == null || state == null || postCode == null 
+            || cAddress == null || pAddress == null || nationality == null){
+                return false;
+            }
+
+        return true;
     }
 
     public void setPersonalInfo(String city,String state,String postCode, String currentAddress, 
@@ -84,11 +112,26 @@ public class Person {
         this.pAddress = parmanentAddress;
         this.nationality = nationality;
     }
+
+    private static String genUniqueBirthCfNumber(){
+        String uniqueNumber = Integer.toString(random.nextInt(100000000, 999999999));
+        return uniqueNumber;
+    }
     
-    public void issueBirthCertificate(){
-        if(filledAddresses()){
+    public String issueBirthCertificate(Person father, Person mother,String bloodGroup){
+        if(!isValidBloodGroup(bloodGroup)){
+            throw new CustomException.InvalidBloodException();
+        }
+        if(!filledAddresses()){
+            throw new CustomException.AddressException();
             
         }
+
+        this.father = father;
+        this.mother = mother;
+        this.bloodGroup = bloodGroup;
+        birthCfNumber = genUniqueBirthCfNumber();
+        return birthCfNumber;
     }
 
 }
