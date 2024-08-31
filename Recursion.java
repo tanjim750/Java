@@ -310,13 +310,14 @@ public class Recursion {
 
         // place tiles size of 1Xm in a floor size of nXm (how many ways it can be placed)
         // System.out.println(inviteSingleOrPair(3));
-        int n = 3;
-        ArrayList<Integer>[] array = allSubsets(3, new ArrayList<>(), new ArrayList[calPower(2, n)]);
+        // int n = 3;
+        // ArrayList<Integer>[] array = allSubsets(3, new ArrayList<>(), new ArrayList[calPower(2, n)]);
 
         // for( ArrayList<Integer> a: array ){
         //     for(int i = 0; i < a.size(); i++){
         //         System.out.println(a.get(i));
         //     }
         // }
+        
     }
 }
